@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres-pag:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "123"
+    ports:
+      - "15432:5432"
+#    volumes: Caso deseje criar um volume, so adicionar o caminho aqui
+#      - /home/Desenvolvimento/docker/PostgreSQL:/var/lib/postgresql/data 
+    networks:
+      - postgres-compose-network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "edmar1soares@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "123"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-pag
+    networks:
+      - postgres-network
+
+networks: 
+  postgres-network:
+    driver: bridge

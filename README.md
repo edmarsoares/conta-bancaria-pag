@@ -23,4 +23,6 @@ Após aplicar o arquivo compose, acessar a url [http://localhost:16543](http://l
 
 Crie uma base de dados de nome `contabancaria`
 
+No arquivo **properties**, setar a propriedade **spring.jpa.hibernate.ddl-auto=create** para criar as tabelas automáticas. **Obs.:** Essa propriedade só deve ser usada para fins acadêmicos para agilizar o desenvolvimento; 
+
 # Rodar a aplicação com dockerfile

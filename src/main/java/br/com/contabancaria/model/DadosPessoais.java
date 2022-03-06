@@ -12,13 +12,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @Entity
 @Table(name = "t_dados_pessoais")
+@NoArgsConstructor
+@AllArgsConstructor
 public class DadosPessoais {
 	
 	@Id
@@ -38,9 +42,6 @@ public class DadosPessoais {
 	@Embedded
 	private Endereco endereco;
 	
-	@JoinColumn(name = "fk_conta")
-	private Conta conta;
-	
-	@Column
+	@Column(unique = true)
 	private String cpf;
 }

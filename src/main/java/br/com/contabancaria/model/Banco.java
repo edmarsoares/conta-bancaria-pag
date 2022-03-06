@@ -6,7 +6,7 @@ public enum Banco implements GeradorBanco {
 
 	BANCO_BRASIL("Banco do Brasil") {
 		@Override
-		public String gerarIdentificadorBanco() {
+		public String getIdentificadorBanco() {
 			return "001";
 		}
 
@@ -22,7 +22,7 @@ public enum Banco implements GeradorBanco {
 	},
 	BANCO_BRADESCO("Bradesco") {
 		@Override
-		public String gerarIdentificadorBanco() {
+		public String getIdentificadorBanco() {
 			return "237";
 		}
 		
@@ -38,7 +38,7 @@ public enum Banco implements GeradorBanco {
 	},
 	BANCO_SANTANDER("Santander") {
 		@Override
-		public String gerarIdentificadorBanco() {
+		public String getIdentificadorBanco() {
 			return "033";
 		}
 		
@@ -54,7 +54,7 @@ public enum Banco implements GeradorBanco {
 	},
 	BANCO_ITAU("Itaú") {
 		@Override
-		public String gerarIdentificadorBanco() {
+		public String getIdentificadorBanco() {
 			return "341";
 		}
 		

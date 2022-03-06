@@ -2,6 +2,7 @@ package br.com.contabancaria.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.contabancaria.dto.request.ContaRequestDTO;
+import br.com.contabancaria.dto.request.DepositoContaRequestDTO;
+import br.com.contabancaria.dto.request.FiltroRequestDTO;
 import br.com.contabancaria.model.Conta;
 import br.com.contabancaria.service.ContaService;
 
@@ -27,9 +30,16 @@ public class ContaController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping("nome/{nome}/agencia/{agencia}")
-	public ResponseEntity<?> buscar(@PathVariable("nome") String nome, @PathVariable("nome") String agencia) throws Exception{
-		Conta conta = contaService.buscar(nome, agencia);
+	@PostMapping("/depositar")
+	public ResponseEntity<?> depositar(@RequestBody DepositoContaRequestDTO deposito) throws Exception{
+		contaService.depositar(deposito);
+		
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("filtro")
+	public ResponseEntity<?> buscaFiltrada(@RequestBody FiltroRequestDTO filter) throws Exception{
+		Conta conta = contaService.buscaFiltrada(filter);
 		
 		return conta != null ? ResponseEntity.ok(conta) : ResponseEntity.noContent().build();
 	}
@@ -39,5 +49,12 @@ public class ContaController {
 		Conta conta = contaService.buscar(numeroConta);
 		
 		return conta != null ? ResponseEntity.ok(conta) : ResponseEntity.noContent().build();
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> removerConta(@PathVariable("id") Long id) throws Exception{
+		contaService.removerConta(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 }

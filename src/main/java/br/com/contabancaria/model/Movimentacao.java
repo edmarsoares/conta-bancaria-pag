@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -21,10 +23,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @Entity
-@Table(name = "t_conta")
+@Table(name = "t_movimentacao")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Conta {
+public class Movimentacao {
 
 	@Id
 	@SequenceGenerator(name = "seq_conta", sequenceName = "seq_conta", initialValue = 1)
@@ -32,7 +34,7 @@ public class Conta {
 	private Long id;
 	
 	@Column
-	private String idBanco;
+	private String nomeCliente;
 	
 	@Column
 	private String agencia;
@@ -40,16 +42,20 @@ public class Conta {
 	@Column
 	private String numeroConta;
 	
+	@JoinColumn(name = "fk_id_conta")
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	private Conta idConta;
+	
 	@JoinColumn(name = "fk_id_dados_pessoais")
-	@OneToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private DadosPessoais dadosPessoais;
 	
 	@Column
-	private Double saldo;
+	private Double valor;
+	
+	@Enumerated(EnumType.STRING)
+	private Operacao operacao;
 	
     @Enumerated(EnumType.STRING)
 	private StatusChequeEspecial statusChequeEspecial;
-	
-	@Column
-	private boolean chequeEspecialLiberado;
 }

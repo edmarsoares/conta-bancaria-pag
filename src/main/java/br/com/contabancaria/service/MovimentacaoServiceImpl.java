@@ -21,17 +21,17 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 	
 	@Transactional
 	@Override
-	public void gerarMovimentacao(DepositoContaRequestDTO deposito, Conta conta, Operacao operacao) {
-		log.info("Gerando movimentacao para o cpf: {}", deposito.getCpf());
+	public void gerarMovimentacao(double valor, Conta conta, Operacao operacao) {
+		log.info("Gerando movimentacao para o cpf: {}", conta.getDadosPessoais().getCpf());
 		
 		Movimentacao movimentacao = Movimentacao.builder()
 		.agencia(conta.getAgencia())
 		.dadosPessoais(conta.getDadosPessoais())
-		.valor(deposito.getValor())
+		.valor(valor)
 		.idConta(conta)
 		.operacao(operacao)
 		.numeroConta(conta.getNumeroConta())
-		.statusChequeEspecial(conta.getStatusChequeEspecial())
+		.statusChequeEspecial(conta.getChequeEspecial() != null ? conta.getChequeEspecial().getStatusChequeEspecial() : null)
 		.nomeCliente(conta.getDadosPessoais().getNomeCompleto())
 		.build();
 		

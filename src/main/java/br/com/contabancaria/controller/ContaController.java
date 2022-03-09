@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.contabancaria.dto.request.ContaRequestDTO;
 import br.com.contabancaria.dto.request.DepositoContaRequestDTO;
 import br.com.contabancaria.dto.request.FiltroRequestDTO;
+import br.com.contabancaria.dto.request.SaqueContaRequestDTO;
+import br.com.contabancaria.dto.request.SaqueResponseDTO;
+import br.com.contabancaria.dto.response.ContaResponseDTO;
 import br.com.contabancaria.model.Conta;
 import br.com.contabancaria.service.ContaService;
 
@@ -30,11 +33,18 @@ public class ContaController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PostMapping("/depositar")
+	@PostMapping("/deposito")
 	public ResponseEntity<?> depositar(@RequestBody DepositoContaRequestDTO deposito) throws Exception{
 		contaService.depositar(deposito);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("/saque")
+	public ResponseEntity<?> sacar(@RequestBody SaqueContaRequestDTO saque) throws Exception{
+		SaqueResponseDTO saqueResponseDto =  contaService.sacar(saque);
+		
+		return ResponseEntity.ok(saqueResponseDto);
 	}
 	
 	@PostMapping("filtro")
@@ -46,7 +56,7 @@ public class ContaController {
 	
 	@GetMapping("/{conta}")
 	public ResponseEntity<?> buscar(@PathVariable("conta") String numeroConta) throws Exception{
-		Conta conta = contaService.buscar(numeroConta);
+		ContaResponseDTO conta = contaService.buscar(numeroConta);
 		
 		return conta != null ? ResponseEntity.ok(conta) : ResponseEntity.noContent().build();
 	}

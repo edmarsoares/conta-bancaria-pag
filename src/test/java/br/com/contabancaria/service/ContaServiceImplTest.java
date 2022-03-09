@@ -1,24 +1,23 @@
 package br.com.contabancaria.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.contabancaria.dto.request.ContaRequestDTO;
@@ -27,8 +26,13 @@ import br.com.contabancaria.dto.request.DepositoContaRequestDTO;
 import br.com.contabancaria.dto.request.EnderecoRequestDTO;
 import br.com.contabancaria.dto.request.FiltroRequestDTO;
 import br.com.contabancaria.model.Banco;
+import br.com.contabancaria.model.ChequeEspecial;
 import br.com.contabancaria.model.Conta;
+import br.com.contabancaria.model.DadosPessoais;
+import br.com.contabancaria.model.StatusChequeEspecial;
+import br.com.contabancaria.model.TipoConta;
 import br.com.contabancaria.repository.ContaRepository;
+import br.com.contabancaria.util.Utils;
 
 public class ContaServiceImplTest {
 
@@ -86,12 +90,13 @@ public class ContaServiceImplTest {
 	@Test
 	public void buscaFiltradaTest() throws Exception {
 		Conta conta = gerarContaMock();
-		when(repository.buscarContaPorNomeEAgencia(anyString(), anyString())).thenReturn(conta);
+		when(repository.buscarContaPorNomeEAgencia(anyString(), anyString(), anyBoolean())).thenReturn(conta);
 
 		FiltroRequestDTO filtroRequestDTO = FiltroRequestDTO
 			.builder()
 			.agencia(Banco.BANCO_BRADESCO.gerarNumeroAgencia())
 			.nome("Edmar Soares")
+			.chequeEspecialAtivo(Boolean.TRUE)
 			.build();
 		
 		assertNotNull(service.buscaFiltrada(filtroRequestDTO));
@@ -99,24 +104,43 @@ public class ContaServiceImplTest {
 	
 	@Test
 	public void buscaContaPorNumeroTest() throws Exception {
-		Conta conta = gerarContaMock();
-		when(repository.findByNumeroConta(anyString())).thenReturn(conta);
+		Mockito.mockStatic(Utils.class);
 
-		FiltroRequestDTO filtroRequestDTO = FiltroRequestDTO
-			.builder()
-			.agencia(Banco.BANCO_BRADESCO.gerarNumeroAgencia())
-			.nome("Edmar Soares")
-			.build();
+		Conta conta = gerarContaMock();
+		when(repository.findByNumeroConta(anyString())).thenReturn(Optional.ofNullable(conta));
+		
+		when(Utils.formatarAgencia(anyString(), anyString())).thenReturn("1234/5678-9");
+		when(Utils.formatarMoeda(any())).thenReturn("R$ 500,00");
+
 		
 		assertNotNull(service.buscar("123456"));
 	}
+	
+	@AfterEach
+	public void after() {
+		Mockito.clearAllCaches();
+	}
 
 	private Conta gerarContaMock() {
+		DadosPessoais dadosPessoais = DadosPessoais.builder()
+				.cpf("12345678911")
+				.nomeCompleto("Edmar soares de lima")
+				.build();
+		
+		ChequeEspecial chequeEspecial = ChequeEspecial.builder()
+				.statusChequeEspecial(StatusChequeEspecial.NAO_LIBERADO)
+				.valorDisponivel(500.0)
+				.saldoAcumulado(0.0)
+				.build();
+		
 		Conta conta = Conta.builder()
 				.agencia(Banco.BANCO_BRADESCO.gerarNumeroAgencia())
 				.saldo(500.0)
-				.chequeEspecialLiberado(Boolean.TRUE)
+				.chequeEspecialAtivo(Boolean.FALSE)
 				.idBanco(Banco.BANCO_BRADESCO.getIdentificadorBanco())
+				.numeroConta(Banco.BANCO_BRADESCO.gerarNumeroConta())
+				.dadosPessoais(dadosPessoais)
+				.chequeEspecial(chequeEspecial)
 				.build();
 		
 		return conta;
@@ -143,6 +167,7 @@ public class ContaServiceImplTest {
 		ContaRequestDTO contaDto = ContaRequestDTO.builder()
 				.banco(Banco.BANCO_BRADESCO)
 				.saldoInicial(500.0)
+				.tipoConta(TipoConta.CORRENTE)
 				.dadosPessoais(dadosPessoaisDto)
 				.build();
 		

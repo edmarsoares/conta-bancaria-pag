@@ -18,12 +18,12 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
     boolean existeContaAssociada(@Param("cpf") String cpf, @Param("idBanco") String idBanco);
     
     @Query("SELECT c FROM Conta c "
-    		+ " INNER JOIN c.dadosPessoais d WHERE d.nomeCompleto LIKE CONCAT('%',:nome,'%') AND c.agencia =:agencia ")
-    Conta buscarContaPorNomeEAgencia(@Param("nome") String nome, @Param("agencia") String agencia);
+    		+ " INNER JOIN c.dadosPessoais d WHERE d.nomeCompleto LIKE CONCAT('%',:nome,'%') AND c.agencia =:agencia AND c.chequeEspecialAtivo =:chequeEspecialAtivo ")
+    Conta buscarContaPorNomeEAgencia(@Param("nome") String nome, @Param("agencia") String agencia, @Param("chequeEspecialAtivo") boolean chequeEspecialAtivo);
     
     @Query("SELECT c FROM Conta c "
     		+ " INNER JOIN c.dadosPessoais d WHERE d.cpf =:cpf AND c.idBanco =:idBanco AND c.numeroConta =:conta ")
     Optional<Conta> buscarContaPorCpfIdBancoENumeroConta(@Param("cpf") String cpf, @Param("idBanco") String idBanco, @Param("conta") String conta);
     
-    Conta findByNumeroConta(String numeroConta);
+    Optional<Conta> findByNumeroConta(String numeroConta);
 }

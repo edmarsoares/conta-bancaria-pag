@@ -47,9 +47,13 @@ public class Conta {
 	@Column
 	private Double saldo;
 	
+	@JoinColumn(name = "fk_id_cheque_especial")
+	@OneToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+    private ChequeEspecial chequeEspecial;
+	
     @Enumerated(EnumType.STRING)
-	private StatusChequeEspecial statusChequeEspecial;
+	private TipoConta tipoConta;
 	
 	@Column
-	private boolean chequeEspecialLiberado;
+	private boolean chequeEspecialAtivo;
 }

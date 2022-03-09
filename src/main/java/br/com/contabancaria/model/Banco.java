@@ -12,7 +12,7 @@ public enum Banco implements GeradorBanco {
 
 		@Override
 		public String gerarNumeroConta() {
-			return Utils.gerarNumeroRandomico(8);
+			return Utils.gerarNumeroRandomico(5);
 		}
 
 		@Override
@@ -28,7 +28,7 @@ public enum Banco implements GeradorBanco {
 		
 		@Override
 		public String gerarNumeroConta() {
-			return Utils.gerarNumeroRandomico(8);
+			return Utils.gerarNumeroRandomico(5);
 		}
 		
 		@Override
@@ -44,7 +44,7 @@ public enum Banco implements GeradorBanco {
 		
 		@Override
 		public String gerarNumeroConta() {
-			return Utils.gerarNumeroRandomico(8);
+			return Utils.gerarNumeroRandomico(5);
 		}
 		
 		@Override
@@ -60,7 +60,7 @@ public enum Banco implements GeradorBanco {
 		
 		@Override
 		public String gerarNumeroConta() {
-			return Utils.gerarNumeroRandomico(8);
+			return Utils.gerarNumeroRandomico(5);
 		}
 		
 		@Override

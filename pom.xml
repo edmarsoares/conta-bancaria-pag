@@ -18,6 +18,7 @@
 		<java.version>11</java.version>
 		<mockito.core.inline.version>4.0.0</mockito.core.inline.version>
 		<springdoc.version>1.6.4</springdoc.version>
+		<shedlock.spring.version>2.3.0</shedlock.spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,18 +66,32 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${springdoc.version}</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.mockito</groupId>
-		    <artifactId>mockito-core</artifactId>
-		    <scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.mockito</groupId>
-		    <artifactId>mockito-inline</artifactId>
-		    <scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+			<scope>test</scope>
 		</dependency>
+		<!-- shedLock -->
+		<dependency>
+			<groupId>net.javacrumbs.shedlock</groupId>
+			<artifactId>shedlock-spring</artifactId>
+			<version>${shedlock.spring.version}</version>
+		</dependency>
+
+		<!-- shedLock lock provider -->
+		<dependency>
+			<groupId>net.javacrumbs.shedlock</groupId>
+			<artifactId>shedlock-provider-jdbc-template</artifactId>
+			<version>${shedlock.spring.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

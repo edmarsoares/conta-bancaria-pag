@@ -14,4 +14,6 @@ public class FiltroRequestDTO {
 	private String nome;
 	
 	private String agencia;
+	
+	private boolean chequeEspecialAtivo;
 }
